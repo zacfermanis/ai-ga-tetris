@@ -94,12 +94,21 @@ public class GeneticAIAlgorithm
 			sortedScores[i] = scores[i];
 			scoreTotal+=scores[i];
 		}
+		double average = scoreTotal/population;
+		double deviation = 0.0;
+		for(int i=0;i<scores.length; i++)
+		{
+			deviation += (scores[i]-average)*(scores[i]-average);
+		}
+		deviation = deviation/(population-1);
+		deviation = Math.sqrt(deviation);
 		Arrays.sort(sortedScores);
 		log.fatal("Generation " + generation + 
 				"; min = " + sortedScores[0] +
 				"; med = " + sortedScores[population/2] +
 				"; max = " + sortedScores[population-1] +
-				"; avg = " + scoreTotal/population);
+				"; avg = " + scoreTotal/population +
+				"; stdDev = " + Double.toString(((double)Math.round(deviation*100))/100));
 		List<double[]> winners = new ArrayList<double[]>();
 
 		if(useTopHalf)
