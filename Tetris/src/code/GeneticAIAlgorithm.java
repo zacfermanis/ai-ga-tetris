@@ -31,11 +31,12 @@ public class GeneticAIAlgorithm
 	/* *** Reproduction options:*****
 	 * if useCrossover is true, crossover is used to generate children
 	 * if useParentsAverage is true, an average of each parents' weights is used
+	 * if useTwinPrevention is true, an offspring cannot have the same weights as a sibling
 	 * if neither is true, a "coin-flip" is used per gene to pick which parent the gene comes from
 	 */	
 	boolean useCrossover = true;
 	boolean useParentsAverage = false;
-	
+	boolean useTwinPrevention = true;
 	
 	
 	// ********** Application Configuration *** //
@@ -154,6 +155,10 @@ public class GeneticAIAlgorithm
 			log.error("Parent #" + (i+1) + ": " + printWeights(winner1, false));
 			log.error("Parent #" + (i+2) + ": " + printWeights(winner2, false));
 			
+			ArrayList<Integer> twinPrevention = new ArrayList<Integer>();
+			int crossover = 0;
+			twinPrevention.add(crossover);
+			
 			// Generate four new children
 			for(int childIdx=0; childIdx<4; childIdx++)
 			{
@@ -162,7 +167,12 @@ public class GeneticAIAlgorithm
 				
 				if (useCrossover)
 				{
-					int crossover = rnd.nextInt(7);
+					// Prevents parents from having identical offspring (twins)
+					while(twinPrevention.contains(crossover))
+					{
+						crossover = rnd.nextInt(5) + 1;
+					}
+					twinPrevention.add(crossover);
 
 					sb.append("Child: " + (childIdx+1) + ". Crossover: " + crossover + ". Weights: ");
 					for(int j=0; j<7;j++)
@@ -180,7 +190,7 @@ public class GeneticAIAlgorithm
 						if (j!=(crossover-1) && j!=6)
 							sb.append(", ");
 						if (j==(crossover-1))
-							sb.append(" ||");
+							sb.append(" || ");
 					}
 					log.error(sb);
 				}
@@ -237,7 +247,7 @@ public class GeneticAIAlgorithm
 			for(int j=0; j<7; j++)
 				chromosomes[i][j] = new_population.get(i)[j];
 		}
-		
+		log.info("*************** Evaluating Next Generation *******************");
 		generation++;
 		current = 0;
 		
