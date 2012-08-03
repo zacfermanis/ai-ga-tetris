@@ -245,7 +245,7 @@ public class TetrisEngine
 	boolean anomaly_flag = false;
 	
 	public boolean useSounds = false;
-	public boolean useAnomaly = false;
+	public boolean useAnomaly = true;
 	
 	public boolean presetState = false;
 	

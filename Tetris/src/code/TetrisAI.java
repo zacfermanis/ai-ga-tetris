@@ -22,13 +22,13 @@ public class TetrisAI
 	AIThread thread;
 	volatile boolean flag = false;
 	
-	/*Time AI has to wait per keypress.*/
+	// Time AI has to wait per keypress. //
 	public static final int waitTime = 2;
 	
-	/*Do we use hard drops?*/
+	// Do we use hard drops? //
 	public static final boolean do_drop = false;
 	
-	/* Output Score to Console? */
+	// Output Score to Console? //
 	public boolean displayScore = false;
 	public boolean displayGrid = false;
 	
@@ -74,8 +74,8 @@ public class TetrisAI
 				
 				try
 				{
-					//If it's merely paused, do nothing; if it's actually game over
-					//then break loop entirely.
+					// If it's merely paused, do nothing; if it's actually game over
+					// then break loop entirely.
 					if(engine.state.equals(GameState.PLAYING))
 					{
 						if(engine.activeblock == null) continue;
@@ -85,7 +85,6 @@ public class TetrisAI
 						if (displayScore)
 						{
 							log.info("*********** BEST FIT: (" + temp.blockX + ", " + temp.blockRotation + ")");
-							//System.out.println("*********** BEST FIT: (" + temp.blockX + ", " + temp.blockRotation + ")");
 						}
 						
 						if(engine.state.equals(GameState.PLAYING))
@@ -94,11 +93,11 @@ public class TetrisAI
 							int bestFitX = temp.blockX;
 							int bestFitRotation = temp.blockRotation;
 							
-							//Move it!
+							// Move it!
 							movehere(bestFitX, bestFitRotation);
 						}
 					}
-					//safety
+					// Safety - Thread timings
 					sleep_(waitTime);
 				}
 				catch(Exception e)
@@ -109,7 +108,7 @@ public class TetrisAI
 			
 		}
 		
-		/*Keypresses to move block to calculated position.*/
+		// Keypresses to move block to calculated position.
 		private void movehere(int finalX, int finalBlockRotation)
 		{
 			int st_blocksdropped = engine.blocksdropped;
@@ -121,7 +120,7 @@ public class TetrisAI
 			int prev_state = init_state;
 			while(flag && engine.activeblock.rot != finalBlockRotation)
 			{
-				//Rotate first so we don't get stuck in the edges.
+				// Rotate first so we don't get stuck in the edges.
 				engine.keyrotate();
 				
 				//Now wait.
@@ -138,7 +137,7 @@ public class TetrisAI
 			prev_state = engine.activeblock.x;
 			while(flag && engine.activeblock.x != finalX)
 			{
-				//Now nudge the block.
+				// Move the block left/right
 				if(engine.activeblock.x < finalX)
 				{
 					engine.keyright();
@@ -160,7 +159,7 @@ public class TetrisAI
 			
 			while(flag && engine.blocksdropped == st_blocksdropped)
 			{
-				//Now move it down until it drops a new block.
+				// Move it down until it drops a new block.
 				engine.keydown();
 				sleep_(waitTime);
 			}
@@ -190,7 +189,7 @@ public class TetrisAI
 			int freeR = free % 10;
 			int minX = 0 - freeL;
 			int maxX = (ge.width-4) + freeR;
-			// now loop through each position for a blockRotation.
+			// Loop through each position for a blockRotation.
 			for(int j=minX; j<=maxX; j++)
 			{
 				BlockPosition put = new BlockPosition();
@@ -221,8 +220,8 @@ public class TetrisAI
 			}
 		}
 
-		// now we begin the evaluation.
-		// for each element in the list we have, calculate a score, and pick
+		// Evaluate each possible fits:
+		// For each element in the list we have, calculate a score, and pick
 		// the best.
 		ScoreGrid[] scores = new ScoreGrid[possibleFits.size() * possibleFits2.size()];
 		
@@ -239,7 +238,7 @@ public class TetrisAI
 			}
 		}
 
-		//retrieve max.
+		// Retrieve max.
 		double max = Double.NEGATIVE_INFINITY;
 		BlockPosition max_b = null;
 		int scoreIndex = 0;
@@ -305,70 +304,71 @@ public class TetrisAI
     			}
 
 			
-    			// Now we find the fitting height by starting from the bottom and
-    			// working upwards. If we're fitting a line-block on an empty
-    			// grid then the height would be height-1, and it can't be any
-    			// lower than that, so that's where we'll start.
-    	
+    			// Find the fitting height by starting from the bottom and
+    			// working upwards. The bottom of the grid is height-1, so start there    	
     			int h;
     			for(h = ge.height-1;; h--)
-    			{
-    	
-    				// indicator. 1: fits. 0: doesn't fit. -1: game over.
+    			{    	
+    				// Indicator to determine if fit is valid. 1: fits. 0: doesn't fit. -1: game over.
     				int fit_state = 1;
     	
     				for(int i=0; i<4; i++)
     					for(int j=0; j<4; j++)
     					{
-    						//check for bounds.
-    	
-    	
+    						// Check for bounds.
     						boolean block_p = block[j][i] >= 1;
-    	
-    						//we have to simulate lazy evaluation in order to avoid
-    						//out of bounds errors.
-    	
+
     						if(block_p)
     						{
-    							//still have to check for overflow. X-overflow can't
-    							//happen at this stage but Y-overflow can.
+    							// Still have to check for overflow. X-overflow can't
+    							// Happen at this stage but Y-overflow can.
     	
     							if(h+j >= ge.height)
+    							{
     								fit_state = 0;
-    	
+    							}
     							else if(h+j < 0)
+    							{
     								fit_state = -1;
-    	
+    							}
     							else
     							{
     								boolean board_p = mockgrid[i+currentBlock.blockX][h+j] >= 1;
     	
     								// Already filled, doesn't fit.
     								if(board_p)
+    								{
     									fit_state = 0;
+    								}
     	
     								// Still the possibility that another block
     								// might still be over it.
     								if(fit_state==1)
     								{
     									for(int h1=h+j-1; h1>=0; h1--)
+    									{
     										if(mockgrid[i+currentBlock.blockX][h1]>=1)
     										{
     											fit_state = 0;
     											break;
     										}
+    									}
     								}
     							}
     						}
     					}
     	
-    				//We don't want game over so here:
+    				// Game over occurred, so return a horrible score
     				if(fit_state==-1)
+    				{
     					return new ScoreGrid(-99999999,mockgrid);
+    				}
     				
-    				//1 = found!
+    				// 1 = found!
     				if(fit_state==1)
+    				{
     					break;
+    				}
     	
     			}
     			
@@ -395,20 +395,20 @@ public class TetrisAI
 			
 			try
 			{
-    			// check for clears
+    			// Check for clears
     			boolean foundline;
     			do{
     				foundline = false;
-    				ML:
+    				MultiLine:
     				for(int i = mockgrid[0].length-1;i>=0;i--)
     				{
     					for(int y = 0;y < mockgrid.length;y++)
     					{
     						if(!(mockgrid[y][i] > 0))
-    							continue ML;
+    							continue MultiLine;
     					}
     					
-    					// line i is full, clear it and copy
+    					// Line i is full, clear it and copy
     					cleared++;
     					foundline = true;
     					for(int a = i;a>0;a--)
@@ -418,7 +418,7 @@ public class TetrisAI
     							mockgrid[y][a] = mockgrid[y][a-1];
     						}
     					}
-    					break ML;
+    					break MultiLine;
     				}
     			}while(foundline);
     			
@@ -432,13 +432,13 @@ public class TetrisAI
 		// Now we evaluate the resulting position.
 
 		// Part of the evaluation algorithm is to count the number of touching sides.
-		// We do this by generating all pairs and seeing how many them are touching.
+		// First, Generating all pairs and see how many them are touching.
 		// If they add up to 3, it means one of them is from the active block and the
 		// other is a normal block (ie. they're touching).
 
 		double score = 0.0;
 
-		//horizontal pairs
+		// Horizontal pairs
 		for(int i=0; i<ge.height; i++)
 			for(int j=0; j<ge.width-1; j++)
 			{
@@ -447,7 +447,7 @@ public class TetrisAI
 				if(mockgrid[j][i] + mockgrid[j+1][i] >= 3) score += _TOUCHING_EDGES;
 			}
 
-		//vertical pairs
+		// Vertical pairs
 		for(int i=0; i<ge.width; i++)
 			for(int j=0; j<ge.height-1; j++)
 			{
@@ -463,7 +463,7 @@ public class TetrisAI
 				if(mockgrid[i][j]>0) score += curheight * _HEIGHT;
 			}
 
-		//Penalize holes. Also penalize blocks above holes.
+		// Penalize holes. Also penalize blocks above holes.
 		for(int i=0; i<ge.width; i++) 
 		{
 			
@@ -494,10 +494,8 @@ public class TetrisAI
 		if (displayScore)
 		{
     		printMockGrid(mockgrid);
-    		log.info(score);
-    		
+    		log.info(score);    		
 		}
-		//System.exit(0);
 
 		return new ScoreGrid(score,mockgrid);
 	}
@@ -514,7 +512,8 @@ public class TetrisAI
 
 	// Takes a int array and calculates how many blocks of free spaces are there
 	// on the left and right. The return value is a 2 digit integer.
- 	static int freeSpaces(byte[][] in){
+ 	static int freeSpaces(byte[][] in)
+ 	{
 
 		// It's free if all of them are zero, and their sum is zero.
 		boolean c1free = in[0][0] + in[1][0] + in[2][0] + in[3][0] == 0;

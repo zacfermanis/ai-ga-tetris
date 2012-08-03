@@ -7,7 +7,7 @@
  
    <appender name="consoleAppender"
       class="org.apache.log4j.ConsoleAppender">
-      <param name="Threshold" value="ERROR" />
+      <param name="Threshold" value="DEBUG" />
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%-5p  [%c{1}] %m %n" />
       </layout>
@@ -16,7 +16,7 @@
    <appender name="fileAppenderGA"
            class="org.apache.log4j.RollingFileAppender">
       <param name="Threshold" value="FATAL" />
-      <param name="File" value="geneticAlgorithm.log"/>
+      <param name="File" value="logs/geneticAlgorithm.log"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%-5p  [%c{1}] %m %n" />
       </layout>
@@ -24,7 +24,7 @@
    <appender name="fileAppenderParents"
            class="org.apache.log4j.RollingFileAppender">
       <param name="Threshold" value="ERROR" />
-      <param name="File" value="parents.log"/>
+      <param name="File" value="logs/parents.log"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%-5p  [%c{1}] %m %n" />
       </layout>
@@ -32,7 +32,7 @@
    <appender name="fileAppenderGenerations"
            class="org.apache.log4j.RollingFileAppender">
       <param name="Threshold" value="INFO" />
-      <param name="File" value="generations.log"/>
+      <param name="File" value="logs/generations.log"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%-5p  [%c{1}] %m %n" />
       </layout>
@@ -40,7 +40,7 @@
    <appender name="fileAppenderDebug"
            class="org.apache.log4j.RollingFileAppender">
       <param name="Threshold" value="DEBUG" />
-      <param name="File" value="debug.log"/>
+      <param name="File" value="logs/debug.log"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%-5p  [%c{1}] %m %n" />
       </layout>
@@ -48,7 +48,7 @@
    <appender name="fileAppenderBestFit"
            class="org.apache.log4j.RollingFileAppender">
       <param name="Threshold" value="FATAL" />
-      <param name="File" value="bestfit.log"/>
+      <param name="File" value="logs/bestfit.log"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%-5p  [%c{1}] %m %n" />
       </layout>

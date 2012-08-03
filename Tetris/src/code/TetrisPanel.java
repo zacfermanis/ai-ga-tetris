@@ -53,14 +53,14 @@ public class TetrisPanel extends JPanel
 		try
 		{
 			bg = ImageIO.read
-				(getResURL("/image/background.png"));
+				(getResURL("/image/background2.png"));
 			
 			// Actually, the background is the actual background plus
 			// the meta image.
 			Image meta = ImageIO.read
 				(getResURL("/image/metalayer.png"));
 			Graphics g = bg.getGraphics();
-			g.drawImage(meta, 0, 0, null);
+			//g.drawImage(meta, 0, 0, null);
 			
 		} catch (Exception e)
 		{
