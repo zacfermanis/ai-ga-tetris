@@ -7,7 +7,11 @@
  
    <appender name="consoleAppender"
       class="org.apache.log4j.ConsoleAppender">
+<<<<<<< HEAD
       <param name="Threshold" value="DEBUG" />
+=======
+      <param name="Threshold" value="INFO" />
+>>>>>>> branch 'master' of https://github.com/zacfermanis/ai-ga-tetris.git
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%-5p  [%c{1}] %m %n" />
       </layout>

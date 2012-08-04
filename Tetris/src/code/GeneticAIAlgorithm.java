@@ -140,7 +140,7 @@ public class GeneticAIAlgorithm
 		}
 		double average = scoreTotal/population;
 		double deviation = 0.0;
-		for (int i=0;i<scores.length; i++)
+		for(int i=0;i<scores.length; i++)
 		{
 			deviation += (scores[i]-average)*(scores[i]-average);
 		}
@@ -222,7 +222,7 @@ public class GeneticAIAlgorithm
 				if (useCrossover)
 				{
 					// Prevents parents from having identical offspring (twins)
-					while (twinPrevention.contains(crossover))
+					while(twinPrevention.contains(crossover))
 					{
 						crossover = rnd.nextInt(5) + 1;
 					}
@@ -309,7 +309,6 @@ public class GeneticAIAlgorithm
 		{
 			saveGeneration(chromosomes);
 		}
-		
 		log.info("*************** Evaluating Next Generation *******************");
 		generation++;
 		current = 0;
