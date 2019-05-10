@@ -1,4 +1,4 @@
-package code;
+package com.fermanis.aitetris;
 
 import java.awt.Color;
 
