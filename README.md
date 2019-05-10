@@ -3,7 +3,7 @@ ai-ga-tetris
 
 A Genetic Algorithm trained to play Tetris
 
-##Setup
+#Setup
 
 Maven + Spring Boot, typical setup. Nothing fancy.
 
