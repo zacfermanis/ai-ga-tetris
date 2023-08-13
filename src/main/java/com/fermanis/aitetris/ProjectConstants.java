@@ -61,7 +61,7 @@ public class ProjectConstants {
     }
 
     /*Returns a resource as a URL object, for certain file
-     * parsing. Should accomodate Eclipse and other clients/IDEs
+     * parsing. Should accommodate Eclipse and other clients/IDEs
      * as well. Currently it loads resources from Eclipse, the
      * jar file, and from Tortoise.*/
     @SuppressWarnings("deprecation")

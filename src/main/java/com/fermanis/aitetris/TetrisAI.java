@@ -452,10 +452,14 @@ public class TetrisAI {
                 }
 
                 sleep_(waitTime);
-
-                if (prev_state == engine.activeblock.x) {
-                    engine.keyslam();
-                    sleep_(3);
+                
+                try {
+                    if (prev_state == engine.activeblock.x) {
+                        engine.keyslam();
+                        sleep_(3);
+                    }
+                } catch (Error error) {
+                    log.error(error.getMessage());
                 }
                 prev_state = engine.activeblock.x;
             }

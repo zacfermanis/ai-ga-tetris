@@ -1,0 +1,17 @@
+app:
+  use_sounds: false
+  use_ai: true
+  train_ai: true
+
+genetic_algo:
+  population: 4
+  mutuation_rate: 0.05
+  runs_per_eval: 3
+  serialize_generation: true
+  use_loadedGeneration: false
+  use_preset_population: true
+  reproduction:
+    useTopHalf: true
+    useCrossover: true
+    useParentsAverage: false
+    useTwinPrevention: true

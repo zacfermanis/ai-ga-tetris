@@ -2,6 +2,10 @@ package com.fermanis.aitetris;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.io.File;
@@ -63,12 +67,18 @@ public class SoundManager {
     //private initializer method.
     private SoundManager() {
         try {
-            tetheme = getResStream("sound/tetris.midi");
-            sx1 = loadsound("sound/soundfall.wav");
-            sx2 = loadsound("sound/soundrotate.wav");
-            sx3 = loadsound("sound/soundtetris.wav");
-            sx4 = loadsound("sound/soundclear.wav");
-            sx5 = loadsound("sound/sounddie.wav");
+            Resource tetrisTheme = new ClassPathResource("sound/tetris.midi");
+            tetheme = tetrisTheme.getInputStream();
+            Resource soundFall = new ClassPathResource("sound/soundfall.wav");
+            sx1 = Applet.newAudioClip(soundFall.getURL());
+            Resource soundRotate = new ClassPathResource("sound/soundrotate.wav");
+            sx2 = Applet.newAudioClip(soundRotate.getURL());
+            Resource soundTetris = new ClassPathResource("sound/soundtetris.wav");
+            sx3 = Applet.newAudioClip(soundTetris.getURL());
+            Resource soundClear = new ClassPathResource("sound/soundclear.wav");
+            sx4 = Applet.newAudioClip(soundClear.getURL());
+            Resource soundDie = new ClassPathResource("sound/sounddie.wav");
+            sx5 = Applet.newAudioClip(soundDie.getURL());
         } catch (Exception e) {
             throw new RuntimeException("Cannot load sound.");
         }
@@ -126,11 +136,4 @@ public class SoundManager {
         } else throw new IllegalArgumentException();
     }
 
-    //returns an AudioClip from a String filename.
-    private static AudioClip loadsound(String name)
-            throws IOException {
-        if (new File(getResURL(name).getFile()).exists())
-            return Applet.newAudioClip(getResURL(name));
-        else throw new IOException("NOT FOUND: " + getResURL(name));
-    }
 }

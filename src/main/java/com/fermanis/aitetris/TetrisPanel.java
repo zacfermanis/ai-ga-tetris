@@ -1,6 +1,11 @@
 package com.fermanis.aitetris;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,10 +14,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.fermanis.aitetris.ProjectConstants.getResURL;
 import static com.fermanis.aitetris.ProjectConstants.sleep_;
 
 /* TetrisPanel is the panel that contains the (main)
@@ -51,17 +56,21 @@ public class TetrisPanel extends JPanel {
         sound = SoundManager.getSoundManager();
         isHumanControlled = !useAI;
 
-        //This is the bg-image.
-        try {
-            bg = ImageIO.read
-                    (getResURL("/image/background2.png"));
 
-            // Actually, the background is the actual background plus
-            // the meta image.
+        
+        try {
+            //This is the Base Background.
+            Resource baseBgResource = new ClassPathResource("image/background.png");
+            File bgFile = baseBgResource.getFile();
+            bg = ImageIO.read(bgFile);
+
+            // The Game Background is the Base Background plus the meta image.
+            Resource metaResource = new ClassPathResource("image/metalayer.png");
+            File metaFile = metaResource.getFile();
             Image meta = ImageIO.read
-                    (getResURL("/image/metalayer.png"));
+                    (metaFile);
             Graphics g = bg.getGraphics();
-            //g.drawImage(meta, 0, 0, null);
+            g.drawImage(meta, 0, 0, null);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -205,6 +205,9 @@ public class GeneticAIAlgorithm {
                     // Prevents parents from having identical offspring (twins)
                     while (twinPrevention.contains(crossover)) {
                         try {
+                            if (rnd == null) {
+                                rnd = new Random();
+                            }
                             crossover = rnd.nextInt(5) + 1;
                         } catch (Exception e) {
                             log.error("Exception occurred when performing crossover. Exception: ", e);
