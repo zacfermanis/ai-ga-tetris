@@ -8,7 +8,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * Main menu user interface for the AI Tetris application.
@@ -31,15 +35,38 @@ public class MainMenuUI extends JFrame {
     private JButton exitButton;
     
     private GameWindow currentGameWindow;
+    private BufferedImage backgroundImage;
     
     /**
      * Constructor creates the main menu window
      */
     public MainMenuUI() {
         this.menuState = new MenuState();
+        loadBackgroundImage();
         initializeUI();
         setupEventHandlers();
         showMenu();
+    }
+    
+    /**
+     * Load the menu background image from resources
+     */
+    private void loadBackgroundImage() {
+        try {
+            // Try to load from resources first
+            InputStream inputStream = getClass().getResourceAsStream("/image/MenuBackground.png");
+            if (inputStream != null) {
+                backgroundImage = ImageIO.read(inputStream);
+                LOGGER.info("Menu background loaded from resources");
+            } else {
+                // Fallback to file system
+                backgroundImage = ImageIO.read(new java.io.File("src/main/resources/image/MenuBackground.png"));
+                LOGGER.info("Menu background loaded from file system");
+            }
+        } catch (IOException e) {
+            LOGGER.warning("Could not load menu background image: " + e.getMessage());
+            backgroundImage = null;
+        }
     }
     
     /**
@@ -70,9 +97,30 @@ public class MainMenuUI extends JFrame {
      * @return The configured main panel
      */
     private JPanel createMainPanel() {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                
+                // Enable high-quality rendering
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                if (backgroundImage != null) {
+                    // Draw background image scaled to fit the panel
+                    g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+                } else {
+                    // Fallback to solid color background
+                    g2d.setColor(new Color(25, 25, 25));
+                    g2d.fillRect(0, 0, getWidth(), getHeight());
+                }
+                
+                g2d.dispose();
+            }
+        };
         panel.setLayout(new BorderLayout());
-        panel.setBackground(new Color(25, 25, 25));  // Darker background for better contrast
         
         // Title panel
         JPanel titlePanel = createTitlePanel();
@@ -96,7 +144,7 @@ public class MainMenuUI extends JFrame {
     private JPanel createTitlePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(new Color(25, 25, 25));  // Darker background for better contrast
+        panel.setOpaque(false);  // Make panel transparent to show background
         panel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
         
         JLabel titleLabel = new JLabel(TITLE);
@@ -114,7 +162,7 @@ public class MainMenuUI extends JFrame {
     private JPanel createMenuPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        panel.setBackground(new Color(25, 25, 25));  // Darker background for better contrast
+        panel.setOpaque(false);  // Make panel transparent to show background
         panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -144,7 +192,7 @@ public class MainMenuUI extends JFrame {
     private JPanel createBottomPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(new Color(25, 25, 25));  // Darker background for better contrast
+        panel.setOpaque(false);  // Make panel transparent to show background
         panel.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
         
         // Sound toggle button

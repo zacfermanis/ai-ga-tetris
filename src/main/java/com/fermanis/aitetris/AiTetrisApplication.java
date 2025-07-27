@@ -93,8 +93,9 @@ public class AiTetrisApplication {
                         // Initialize configuration manager
                         ConfigurationManager.initialize();
                         
-                        // Launch main menu instead of direct game
-                        MainMenuUI mainMenu = new MainMenuUI();
+                        // Launch splash screen first, then main menu
+                        SplashScreen splashScreen = new SplashScreen();
+                        splashScreen.start();
                     }
                 }).start();
             }
